@@ -1,0 +1,220 @@
+<%- include ("partials/head.ejs") %>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include ("partials/Sidebar.ejs") %>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include ("partials/Topbar.ejs") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow mb-4 rounded-0">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form action="createSmtpGatway" method="post">
+                                
+                                        <div class="form-group">
+                                            <input type="hidden"  id="hiddenid">
+                                          <label for="exampleInputEmail1">Server Email</label>
+                                          <input type="text" name="email" class="form-control rounded-0" id="smtpserveremail" aria-describedby="emailHelp" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                           
+                                          <label for="exampleInputEmail1">Smtp server</label>
+                                          <input type="text" name="smtpserver" class="form-control rounded-0" id="smtpserver" aria-describedby="emailHelp" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                           
+                                          <label for="exampleInputEmail1">Port No</label>
+                                          <input type="text" name="portno" class="form-control rounded-0" id="smtpserverport" aria-describedby="emailHelp" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            
+                                          <label for="exampleInputEmail1">Password</label>
+                                          <input type="text" name="password" class="form-control rounded-0" id="smtpserverpass" aria-describedby="emailHelp" required>
+                                        </div>
+                                       
+                                        <div class="text-right hidesubmitebutton">
+                                            <button type="submit" class="btn btn-primary rounded-0">Submit</button>
+                                        </div>
+                                      </form>
+                                      <div class="text-right">
+                                      <button  class="btn btn-primary rounded-0 updatesorcedata d-none">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="col-lg-8 mb-4">
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4 rounded-0">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Source List</h6>
+                                </div>
+                                <div class="card-body">
+                                
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered text-center sourceTable" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Smtp</th>
+                                                <th>Email</th>
+                                                <th>Port No</th>
+                                                <th>Password</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Smtp</th>
+                                                <th>Email</th>
+                                                <th>Port No</th>
+                                                <th>Password</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <% for(let smtp of smtpserverList){%>
+                                            <tr>
+                                                <td><%-smtp.smtpserver %></td>
+                                                <td><%-smtp.email %></td>
+                                                <th><%-smtp.portno %></th>
+                                                <th><%-smtp.password %></th>
+                                                <td><a  class="editsouceList" data-id="<%-smtp.id %>" data-server="<%-smtp.smtpserver %>" data-serveremail="<%-smtp.email %>" data-smtpserverport="<%-smtp.portno %>" data-smtpserverpass="<%-smtp.password %>"><i class="fas fa-edit"></i></a>
+                                                    |  <a class="deletesouceList" data-id="<%-smtp.id %>" ><i class="fas fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                            <%}%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <%- include ("partials/footer.ejs") %>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+
+
+    <%- include ("partials/footerend.ejs") %>
+
+    <script>
+        $(document).ready(function(){
+
+            $(".sourceTable").on('click','.editsouceList',function(){
+                let id = $(this).attr('data-id');
+                let smtpserver = $(this).attr('data-server'); 
+                let smtpserveremail = $(this).attr('data-serveremail');
+                let smtpserverport = $(this).attr('data-smtpserverport');
+                let smtpserverpass = $(this).attr('data-smtpserverpass');
+
+                $("#smtpserver").val(smtpserver);
+                $("#smtpserveremail").val(smtpserveremail);
+                $("#smtpserverport").val(smtpserverport);
+                $("#smtpserverpass").val(smtpserverpass);
+                $('#hiddenid').val(id)
+
+                $('.hidesubmitebutton').addClass('d-none')
+                $(".updatesorcedata").removeClass('d-none')
+            })
+
+            $('.updatesorcedata').on('click',function(){
+               
+                let id = $('#hiddenid').val();
+                let smtpserver =  $("#smtpserver").val();
+                let smtpserveremail = $("#smtpserveremail").val();
+                let smtpserverport = $("#smtpserverport").val();
+                let smtpserverpass = $("#smtpserverpass").val();
+
+                console.log('id------------->',id)
+                console.log('smtpserver------------->',smtpserver)
+                console.log('smtpserveremail------------->',smtpserveremail)
+                console.log('smtpserverport------------->',smtpserverport)
+                console.log('smtpserverpass------------->',smtpserverpass)
+
+                $.ajax({
+                type:'POST',
+                url: 'updateSmtpGatway',
+                data: {
+                    id:id,
+                    smtpserver:smtpserver,
+                    smtpserveremail:smtpserveremail,
+                    smtpserverport:smtpserverport,
+                    smtpserverpass:smtpserverpass
+                },
+                success: function(data){
+                        console.log('Success report------------->',data)
+                        if(data.status === '200'){
+                            swal({title: "Good job", text: "Source Successfully updated", icon: "success", type: 
+                            "success"}).then(function(){ 
+                            location.reload();
+                            }
+                            );
+                        }
+                }
+                });
+            })
+            
+            //deletesouceList
+            $(".sourceTable").on('click','.deletesouceList',function(){
+                let sourceid = $(this).attr('data-id');
+             
+                $.ajax({
+                type:'POST',
+                url: 'deleteemailgatway',
+                data: {
+                    id:sourceid
+                },
+                success: function(data){
+                        console.log('Success report------------->',data)
+                        if(data.status === '200'){
+                            swal({title: "Good job", text: "Source Successfully Deleted", icon: "success", type: 
+                            "success"}).then(function(){ 
+                            location.reload();
+                            }
+                            );
+                        }
+                }
+                });
+            })
+
+        })
+    </script>

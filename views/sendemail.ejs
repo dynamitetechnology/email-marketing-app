@@ -1,0 +1,154 @@
+<%- include ("partials/head.ejs") %>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include ("partials/Sidebar.ejs") %>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include ("partials/Topbar.ejs") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                      
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-lg-12 mb-4">
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Send Email</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                          <lebel>Select Template</lebel>
+                                          <select class="form-control rounded-0" id="templateId" name="templateId" required>
+                                              <option>Select Template</option>
+                                              <% for(let template of templatelist){%>
+                                                    <option value="<%- template.id %>"><%- template.name %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <lebel>Select Email</lebel>
+                                          <select class="form-control rounded-0" id="smtpserverid" name="smtpserverid" required>
+                                              <option>Select Email</option>
+                                              <% for(let smtp of smtpserverList){%>
+                                                <option value="<%- smtp.id %>"><%- smtp.email %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <lebel>Select Source</lebel>
+                                          <select class="form-control rounded-0" id="emailsourceId" name="emailsourceId" required>
+                                              <option>Select Source</option>
+                                              <% for(let source of sourceList){%>
+                                                <option value="<%- source.id %>"><%- source.name %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+                                    </div>
+                                        <div class="text-right mt-3">
+                                            <button type="button" class="btn btn-success rounded-0 pl-3 pr-3 sendemailonclick">Send</button>
+                                        </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Priview Template</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="" id="templatePriview"></div>
+                                </div>
+                            </div>
+
+                            <!-- Color System -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <%- include ("partials/footer.ejs") %>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <%- include ("partials/footerend.ejs") %>
+    <script>
+        $(document).ready(function(){
+            $(".sendemailonclick").on('click',function(){
+
+                let templateId = $("#templateId").val();
+                let smtpserverid = $("#smtpserverid").val();
+                let emailsourceId = $("#emailsourceId").val();
+
+                console.log('templateId------>',templateId)
+                console.log('smtpserverid------>',smtpserverid)
+                console.log('emailsourceId------>',emailsourceId)
+
+                $.ajax({
+                type: "POST",
+                url: "sendemailtousers",
+                data: {templateId:templateId,
+                    smtpserverid:smtpserverid,
+                    emailsourceId:emailsourceId
+                },
+                success: function(data){
+                    console.log('Data--------->',data)
+
+                        swal({title: "Good job", text: "Email Send Successsfully", type: 
+                        "success"}).then(function(){ 
+                        location.reload();
+                        }
+                        );
+                }
+                });
+            })
+
+                        //onchnage template load
+
+            $('#templateId').change(function(){
+                console.log('chnage-------->')
+                let templateId = $("#templateId").val();
+                console.log('templateId------>',templateId)
+
+                $.ajax({
+                type: "POST",
+                url: "priviewTemplateSendEmail",
+                data: {
+                    templateId:templateId
+                },
+                success: function(data){
+                    console.log('Data--------->',data.sourceList)
+                    let templatePriviewAjax = "";
+
+                    templatePriviewAjax = `${data.sourceList.content}`
+
+                    var decoded = $("<div/>").html(data.sourceList.content).text();
+                    $("#templatePriview").html(decoded);
+                }
+                });
+                
+            })
+        })
+    </script>

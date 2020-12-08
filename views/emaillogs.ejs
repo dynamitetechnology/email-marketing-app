@@ -1,0 +1,96 @@
+<%- include ("partials/head.ejs") %>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include ("partials/Sidebar.ejs") %>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include ("partials/Topbar.ejs") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                      
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-lg-12 mb-4">
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Email Logs</h6>
+                                </div>
+                                <div class="card-body">
+                                 
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-center sourceTable" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>From Email</th>
+                                                    <th>Ip Address</th>
+                                                    <th>Open By</th>
+                                                    <th>View Datetime</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>From Email</th>
+                                                    <th>Ip Address</th>
+                                                    <th>Open By</th>
+                                                    <th>View Datetime</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <% for(let loglist of emailLoglist){%>
+                                                <tr>
+                                                    <td><%-loglist.from_email%></td>
+                                                    <td><%-loglist.ipaddress%></td>
+                                                    <td><%-loglist.viewby%></td>
+                                                    <td><%-loglist.viewdatetime%></td>
+                                                    <td><%-loglist.senddate%></td>
+                                                </tr>
+                                                <%}%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                   
+                                 
+                                </div>
+                            </div>
+
+                            <!-- Color System -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <%- include ("partials/footer.ejs") %>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <%- include ("partials/footerend.ejs") %>
+    <script>
+        $(document).ready(function(){
+            
+
+        })
+    </script>

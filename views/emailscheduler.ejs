@@ -1,0 +1,203 @@
+<%- include ("partials/head.ejs") %>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include ("partials/Sidebar.ejs") %>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include ("partials/Topbar.ejs") %>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                      
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Content Column -->
+                        <div class="col-lg-12 mb-4">
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Email Scheduling</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                          <lebel>Select Template</lebel>
+                                          <select class="form-control rounded-0" id="templateId" name="templateId" required>
+                                              <option>Select Template</option>
+                                              <% for(let template of templatelist){%>
+                                                    <option value="<%- template.id %>"><%- template.name %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                          <lebel>Select Email</lebel>
+                                          <select class="form-control rounded-0" id="smtpserverid" name="smtpserverid" required>
+                                              <option>Select Email</option>
+                                              <% for(let smtp of smtpserverList){%>
+                                                <option value="<%- smtp.id %>"><%- smtp.email %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                          <lebel>Select Source</lebel>
+                                          <select class="form-control rounded-0" id="emailsourceId" name="emailsourceId" required>
+                                              <option>Select Source</option>
+                                              <% for(let source of sourceList){%>
+                                                <option value="<%- source.id %>"><%- source.name %></option>
+                                                <%}%>
+                                          </select>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <lebel>Select Date</lebel>
+                                            <input type="datetime-local" name="sceduledate" id="sceduledate" class="form-control rounded-0">
+                                          </div>
+
+                                    </div>
+                                        <div class="text-right mt-3">
+                                            <button type="button" class="btn btn-success rounded-0 pl-3 pr-3 scheduleemailonclick">Save And Schedule</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Priview Template</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="" id="templatePriview"></div>
+                                </div>
+                            </div>
+
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Scheduled Email List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-center sourceTable" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr No.</th>
+                                                    <th>Template Name</th>
+                                                    <th>Email Gaytway</th>
+                                                    <th>Schedule Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Sr No.</th>
+                                                    <th>Template Name</th>
+                                                    <th>Email Gaytway</th>
+                                                    <th>Schedule Date</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <% for(let list of scheduleList){%>
+                                                <tr>
+                                                    <td><%- list.id %></td>
+                                                    <td><%- list.template_id %></td>
+                                                    <td><%- list.email_gaytway_id %></td>
+                                                    <td><%- list.schedule_date %></td>
+                                                </tr>
+                                                <%}%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Color System -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <%- include ("partials/footer.ejs") %>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <%- include ("partials/footerend.ejs") %>
+    <script>
+        $(document).ready(function(){
+            $(".scheduleemailonclick").on('click',function(){
+
+                let templateId = $("#templateId").val();
+                let smtpserverid = $("#smtpserverid").val();
+                let emailsourceId = $("#emailsourceId").val();
+                let sceduledate = $("#sceduledate").val();
+
+                console.log('templateId------>',templateId)
+                console.log('smtpserverid------>',smtpserverid)
+                console.log('emailsourceId------>',emailsourceId)
+                console.log('sceduledate------>',sceduledate)
+
+                $.ajax({
+                type: "POST",
+                url: "sendscheduleemail",
+                data: {
+                    templateId:templateId,
+                    smtpserverid:smtpserverid,
+                    emailsourceId:emailsourceId,
+                    sceduledate:sceduledate
+                },
+                success: function(data){
+                    console.log('Data--------->',data)
+
+                        swal({title: "Good job", text: "Email Send Successsfully", type: 
+                        "success"}).then(function(){ 
+                        location.reload();
+                        }
+                        );
+                }
+                });
+            })
+
+                        //onchnage template load
+
+            $('#templateId').change(function(){
+                console.log('chnage-------->')
+                let templateId = $("#templateId").val();
+                console.log('templateId------>',templateId)
+
+                $.ajax({
+                type: "POST",
+                url: "priviewTemplateSendEmail",
+                data: {
+                    templateId:templateId
+                },
+                success: function(data){
+                    console.log('Data--------->',data.sourceList)
+                    let templatePriviewAjax = "";
+
+                    templatePriviewAjax = `${data.sourceList.content}`
+
+                    var decoded = $("<div/>").html(data.sourceList.content).text();
+                    $("#templatePriview").html(decoded);
+                }
+                });
+                
+            })
+        })
+    </script>
