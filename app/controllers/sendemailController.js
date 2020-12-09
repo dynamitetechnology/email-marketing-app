@@ -147,7 +147,7 @@ module.exports = {
                 let trackImgUrl = process.env.DOMAIN_BASE_PATH + 'upload/' + randomImg;
                 let date = new Date();
 
-                let imagePathStatic = 'upload/' + randomImg;
+                let imagePathStatic = '/upload/' + randomImg; // path for compare the value of who view email
 
                 emailfunction.sendBulkEmailUsingSMTPServer(smtpserverList, templatelist, key.email_address, trackImgUrl);
                 //insert query 
