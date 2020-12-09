@@ -339,7 +339,7 @@ module.exports = {
             to: `${to}`, // list of receivers (who receives)
             subject: `${templatelist.subject}`, // Subject line
             //html: `${templatelist.content}` + `<img src="${completeFilePath}" style="display:none;">` // html body
-             html: entities.decode(templatelist.content + `<img src="${completeFilePath}" >`)
+             html: entities.decode(templatelist.content + `<img src="${completeFilePath}" style="display:none;">`)
         };
         console.log("completeFilePath==================>: %s", completeFilePath);
           transporter.sendMail(mailOptions, function (error, info) {
