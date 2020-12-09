@@ -322,8 +322,6 @@ module.exports = {
           
 
     sendBulkEmailUsingSMTPServer: (smtpserverList,templatelist,to,completeFilePath) => {
-
-      
         let transporter = nodemailer.createTransport({
             //host: 'mail.dynamitetechnology.in',
             host:smtpserverList.smtpserver,//smtp server ex mail.dynamitetechnology.in
@@ -334,20 +332,15 @@ module.exports = {
                 pass: smtpserverList.password// email server pasword
             }
         });
-     
-
+    
         console.log(entities.decode(templatelist.content));
-
-
         let mailOptions = {
             from: `${templatelist.subject}`+'<'+smtpserverList.email+'>', // sender address (who sends)
             to: `${to}`, // list of receivers (who receives)
             subject: `${templatelist.subject}`, // Subject line
             //html: `${templatelist.content}` + `<img src="${completeFilePath}" style="display:none;">` // html body
-             html: entities.decode(templatelist.content + `<img src="${completeFilePath}" style="display:none;">`)
+             html: entities.decode(templatelist.content + `<img src="${completeFilePath}" >`)
         };
-
-
         console.log("completeFilePath==================>: %s", completeFilePath);
           transporter.sendMail(mailOptions, function (error, info) {
             console.log("Message sent==================>: %s", info);

@@ -103,7 +103,7 @@ module.exports = {
 
             })
 
-            res.render("index.ej");
+            res.render("index.ejs");
 
         })()
 
