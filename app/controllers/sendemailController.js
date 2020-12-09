@@ -147,12 +147,14 @@ module.exports = {
                 let trackImgUrl = process.env.DOMAIN_BASE_PATH + 'upload/' + randomImg;
                 let date = new Date();
 
+                let imagePathStatic = 'upload/' + randomImg;
+
                 emailfunction.sendBulkEmailUsingSMTPServer(smtpserverList, templatelist, key.email_address, trackImgUrl);
                 //insert query 
                 let useremailSourceList = await new Promise(resolve => {
                     const statement = {
                         text: "insert into email_send_statics(user_email, image_path, createdby, sendby, from_email,template_id,email_source_id, senddate, imagestaticpath) values ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-                        values: [key.email_address, trackImgUrl, res.locals.username, res.locals.username, smtpserverList.email, templatelist.id, key.email_source_id, date.toDateString(), trackImgUrl]
+                        values: [key.email_address, trackImgUrl, res.locals.username, res.locals.username, smtpserverList.email, templatelist.id, key.email_source_id, date.toDateString(), imagePathStatic]
                     }
                     db.query(statement, async function (err, obj) {
                         if (err) throw err;
