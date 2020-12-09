@@ -67,7 +67,7 @@ module.exports = {
                 })
             })
 
-            console.log('templatelist------------->', templatelist)
+  
             res.render("sendemail.ejs", {
                 templatelist: templatelist,
                 sourceList: sourceList,
@@ -90,13 +90,7 @@ module.exports = {
             let errors = validationResult(req);
             let userObj = {};
 
-            console.log('templateId===========>', req.body.templateId)
-            console.log('smtpserverid===========>', req.body.smtpserverid)
-            console.log('emailsourceId===========>', req.body.emailsourceId)
-
-
-            console.log('USername------------->', res.locals.username)
-
+  
             let templatelist = await new Promise(resolve => {
                 const statement = {
                     text: "SELECT id, name, subject, content, active, createdby FROM email_templates WHERE active ='Y' and id = $1 order by id desc",
@@ -133,10 +127,6 @@ module.exports = {
                 })
             })
 
-            console.log('templatelist------------->', templatelist)
-            //let host = templatelist.smtpserver;
-            console.log('useremailSourceList------------->', useremailSourceList)
-            console.log('smtpserverList------------->', smtpserverList)
 
 
 

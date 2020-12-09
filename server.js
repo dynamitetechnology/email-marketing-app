@@ -1,15 +1,9 @@
 const express = require('express');
 const path = require('path');
-const fileUpload = require('express-fileupload');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const redis = require('redis');
-const port = 5000;
-const app = express();
 const dbConfig = require('./config/db');
-var client = redis.createClient(6379, process.env.REDIS_IP);
-
-app.use(cookieParser('your-secret-dontknow'));
 const loginRouter = require('./app/routers/loginRouter');
 const dashboardController = require('./app/routers/dashboardRouter');
 const sendemailRoutes = require('./app/routers/sendemailRouter');
@@ -20,35 +14,18 @@ const emailgatwayRouter = require('./app/routers/emailgatwayRouter');
 const uploadfileRouter = require('./app/routers/fileuploadRouter');
 const scheduleRouter = require('./app/routers/scheduleEmailRouter');
 
-
-
-
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+const port = 5000;
+const app = express();
+var client = redis.createClient(6379, process.env.REDIS_IP);
 
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: false
 }));
 
-app.use('/', loginRouter);
-app.use('/', setUserData, loginRequired, dashboardController);
-app.use('/', setUserData, loginRequired, sendemailRoutes);
-app.use('/', setUserData, loginRequired, createTemplateRoutser);
-app.use('/', setUserData, loginRequired, souceListRouter);
-app.use('/', setUserData, loginRequired, createuserRouter);
-app.use('/', setUserData, loginRequired, emailgatwayRouter);
-app.use('/', setUserData, loginRequired, uploadfileRouter);
-app.use('/',setUserData, loginRequired,scheduleRouter)
-//Use JSON parser for all non-webhook routes
+
 app.use((req, res, next) => {
 	console.log("Request URL==>> ", req.originalUrl)
-
-
 	//if(req.originalUrl == '/assets/img/web3.png')
 	if (req.originalUrl.includes("webemailhiddenmedia.png")) {
 		console.log("I am an image")
@@ -92,7 +69,15 @@ app.use((req, res, next) => {
 	}
 	next();
 });
-(async function () {
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs')
+
+app.use(cookieParser('your-secret-dontknow'));
+
+;(async function () {
 	client.AUTH(process.env.REDIS_PASS, async function (err, result) {
 		if (err) {
 			console.log('redis connection errr => ', err);
@@ -104,9 +89,24 @@ app.use((req, res, next) => {
 	app.locals.db = pgClient;
 	app.locals.redisdb = client;
 	app.listen(port, function () {
-		console.log('server started at ', 5000);
+		console.log('server started at ', port);
 	})
 })();
+
+
+
+app.use('/', loginRouter);
+app.use('/', setUserData, loginRequired, dashboardController);
+app.use('/', setUserData, loginRequired, sendemailRoutes);
+app.use('/', setUserData, loginRequired, createTemplateRoutser);
+app.use('/', setUserData, loginRequired, souceListRouter);
+app.use('/', setUserData, loginRequired, createuserRouter);
+app.use('/', setUserData, loginRequired, emailgatwayRouter);
+app.use('/', setUserData, loginRequired, uploadfileRouter);
+app.use('/',setUserData, loginRequired,scheduleRouter)
+
+
+
 
 
 function setUserData(req, res, next) {
